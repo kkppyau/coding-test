@@ -1,8 +1,10 @@
+import orderBy from 'lodash/orderBy';
 import puppeteer from 'puppeteer';
+import { NewsOrderType, NewsType } from '../../../interfaces';
 
 export const resolvers = {
 	Query: {
-		getNews: async () => {
+		getNews: async (_: any, { order }: NewsOrderType) => {
 			try {
 				const url = 'https://news.ycombinator.com/news';
 				const browser = await puppeteer.launch();
@@ -54,8 +56,11 @@ export const resolvers = {
 					});
 				});
 				await browser.close();
-
-				return news;
+				return orderBy(
+					news,
+					[(o: NewsType) => parseInt(o.subtext.comment.value?.replace(/\D/g, '')) || 0],
+					[order]
+				);
 			} catch (error) {
 				throw error;
 			}

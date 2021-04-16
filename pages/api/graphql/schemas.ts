@@ -1,6 +1,11 @@
 import { gql } from 'apollo-server-micro';
 
 export const typeDefs = gql`
+	enum Sort {
+		asc
+		desc
+	}
+
 	type DetailType {
 		value: String
 		link: String
@@ -22,6 +27,6 @@ export const typeDefs = gql`
 	}
 
 	type Query {
-		getNews: [NewsType!]!
+		getNews(order: Sort): [NewsType!]!
 	}
 `;
