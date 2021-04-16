@@ -1,0 +1,23 @@
+html,
+body {
+	font-family: Roboto;
+	word-break: break-all;
+}
+
+a {
+	color: black;
+	text-decoration: none;
+}
+
+.MuiCircularProgress-root {
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+.MuiTypography-body2 {
+	line-height: 2 !important;
+}
