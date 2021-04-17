@@ -6,12 +6,13 @@ export const resolvers = {
 	Query: {
 		getNews: async (_: any, { order }: NewsOrderType) => {
 			try {
-				const url = 'https://news.ycombinator.com/news';
+				const baseUrl = 'https://news.ycombinator.com/';
+				const path = 'news';
 				const browser = await puppeteer.launch();
 				const page = await browser.newPage();
-				await page.goto(url);
+				await page.goto(baseUrl + path);
 
-				const news = await page.evaluate(() => {
+				const news = await page.evaluate((baseUrl) => {
 					const arr = document.querySelectorAll(
 						'#hnmain > tbody > tr:nth-child(3) > td > table > tbody > tr'
 					);
@@ -23,38 +24,42 @@ export const resolvers = {
 
 					return results.map((result) => {
 						const mainElement = result[0].querySelector('td:nth-child(3)');
-						const mainElementAnchor = mainElement?.querySelectorAll('a');
 						const subElement = result[1].querySelector('td:nth-child(2)');
-						const subElementAnchor = subElement?.querySelectorAll('a');
 						return {
-							title: mainElementAnchor?.[0]?.text,
-							link: mainElementAnchor?.[0]?.href,
+							title: mainElement?.querySelector('a[class=storylink]')?.innerHTML,
+							link: mainElement?.querySelector('a[class=storylink]')?.getAttribute('href'),
 							extra: {
-								value: mainElementAnchor?.[1]?.text,
-								link: mainElementAnchor?.[1]?.href,
+								value: mainElement?.querySelector('.sitebit > a > span[class=sitestr]')?.innerHTML,
+								link: baseUrl + mainElement?.querySelector('.sitebit > a')?.getAttribute('href'),
 							},
 							subtext: {
-								score: subElement?.querySelector('span[class=score]')?.textContent,
+								score: subElement?.querySelector('span[class=score]')?.innerHTML,
 								author: {
-									value: subElementAnchor?.[0]?.text,
-									link: subElementAnchor?.[0]?.href,
+									value: subElement?.querySelector('a[class=hnuser]')?.innerHTML,
+									link: baseUrl + subElement?.querySelector('a[class=hnuser]')?.getAttribute('href'),
 								},
 								age: {
-									value: subElementAnchor?.[1]?.text,
-									link: subElementAnchor?.[1]?.href,
+									value: subElement?.querySelector('.age > a')?.innerHTML,
+									link: baseUrl + subElement?.querySelector('.age > a')?.getAttribute('href'),
 								},
 								hide: {
-									value: subElementAnchor?.[2]?.text,
-									link: subElementAnchor?.[2]?.href,
+									value: subElement?.querySelector('a:nth-last-child(2):not(.age > a)')?.textContent,
+									link:
+										baseUrl +
+										subElement
+											?.querySelector('a:nth-last-child(2):not(.age > a)')
+											?.getAttribute('href'),
 								},
 								comment: {
-									value: subElementAnchor?.[3]?.text,
-									link: subElementAnchor?.[3]?.href,
+									value: subElement?.querySelector('a:last-child:not(.age > a)')?.textContent,
+									link:
+										baseUrl +
+										subElement?.querySelector('a:last-child:not(.age > a)')?.getAttribute('href'),
 								},
 							},
 						};
 					});
-				});
+				}, baseUrl);
 				await browser.close();
 				return orderBy(
 					news,
