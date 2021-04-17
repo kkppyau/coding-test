@@ -82,9 +82,15 @@ query {
 ## Future improvement(s)
 
 1. Show more than one page of data like adding "show more" button or scroll to the bottom to fetch data from other pages
+1. Set timeout for fetching data
+1. Use absolute imports to have better management of the import file path and avoid getting disturb by the "../../../"
 1. Add reloading button or function to get the latest news data by creating manual reload button, SWR, etc.
 1. Add filtering to Graphql if we want to search for specific news by keywords
 1. Add pagination to Graphql if we want to get more than one page of data
 1. Seperate styles to different files to be more manageable
 1. Connect the application with Graphql using Apollo and wrap the application with HOC
-1. Use absolute imports to have better management of the import file path and avoid getting disturb by the "../../../"
+
+## Further Considertion
+
+1. Static Generation & ISR - seems not useful for this kind of searching application and need to get the latest posts
+1. Using Server-side Rendering ?? - seo is not matter for searching application

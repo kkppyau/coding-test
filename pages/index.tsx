@@ -54,4 +54,16 @@ const IndexPage = () => {
 	);
 };
 
+// export async function getServerSideProps() {
+// 	const {
+// 		data: { data },
+// 	} = await axios({
+// 		data: JSON.stringify({ query }),
+// 		method: 'POST',
+// 		url: 'http://localhost:3000/api/graphql',
+// 	});
+
+// 	return { props: { data } };
+// }
+
 export default IndexPage;
