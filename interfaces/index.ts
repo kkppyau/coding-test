@@ -1,6 +1,6 @@
-enum Sort {
-	asc,
-	desc,
+export enum Sort {
+	asc = 'asc',
+	desc = 'desc',
 }
 
 type DetailType = {
