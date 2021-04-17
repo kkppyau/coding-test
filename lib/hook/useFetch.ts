@@ -26,7 +26,7 @@ const useFetch = ({ query = '', url = '' }: FetchArgument) => {
 				method: 'POST',
 				url,
 			});
-			setResponse(data);
+			setResponse(data || []);
 		})();
 
 		return () => cancel();
